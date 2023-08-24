@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- Container wrapper -->
+    <div class="container-fluid">
+      <!-- Toggle button -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-mdb-toggle="collapse"
+        data-mdb-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <i class="fas fa-bars"></i>
+      </button>
+  
+      <!-- Collapsible wrapper -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <!-- Navbar brand -->
+        <a class="navbar-brand mt-2 mt-lg-0" href="#">
+          <img
+            src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp"
+            height="15"
+            alt="MDB Logo"
+            loading="lazy"
+          />
+        </a>
+        <!-- Left links -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="/vendor/">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/vendor/addproduct/">Add Your Product</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/vendor/viewproduct/">View product</a>
+          </li>
+        </ul>
+        <!-- Left links -->
+      </div>
+      <!-- Collapsible wrapper -->
+  
+      <!-- Right elements -->
+      <div class="d-flex align-items-center">
+        
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          
+            <li class="nav-item">
+              <a class="nav-link" href="#">My profile</a>
+            </li>
+            <li class="nav-item" >
+              <a class="nav-link" href="#">Settings</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/vendor/venlogout/">Logout</a>
+            </li>
+        </ul>
+        </div>
+      </div>
+      <!-- Right elements -->
+    </div>
+    <!-- Container wrapper -->
+  </nav>
+  <!-- Navbar -->
+
+  <section class="m-5">
+    <div class="container mt-5" >
+    
+    
+        <h1 style="margin-top: 10%;">My Products</h1>
+        <table class="table table-striped table-dark">
+            <thead>
+              <tr>
+                <th scope="col">Sno</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">qty</th>
+                <th scope="col">Image</th>
+                <th scope="col">category</th>
+              </tr>
+            </thead>
+            {% for x in data %}
+            <tbody>
+              <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{x.productname}}</td>
+                <td>{{x.newprice}}</td>
+                <td>{{x.qty}}</td>
+                <td><img src="{{x.image.url}}" width="75px" height="50px" style="object-fit: contain;"></td>
+                <td>{{x.catagory}}</td>
+                <td><a style="text-decoration: none;" href="/vendor/prdelete/?regid={{x.id}}"><span style="color: red;">Delete</span></a> </td>
+              </tr>
+    
+    
+            {% endfor %}
+             
+            </tbody>
+          </table>
+    
+    
+    </div>
+    </section>
+
+
+</body>
+</html>
