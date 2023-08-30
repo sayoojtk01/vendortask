@@ -2,7 +2,8 @@ from django.shortcuts import render,redirect
 from vapp.models import*
 from vendor.models import*
 from django.http import HttpResponseRedirect
-
+import razorpay
+import requests
 
 # Create your views here.
 
@@ -17,27 +18,46 @@ def vindex(request):
 
 
 def register(request):
-    if request.method=='POST':
-        name=request.POST['name']
-        email=request.POST['email']
-        password=request.POST['password']
-        cpassword=request.POST['cpassword']
-        bank=request.POST['account_number']
-        ifsc=request.POST['ifsc_code']
-        # place=request.POST['place']
-        check=vendor_register_tb.objects.filter(email=email)
-        if password==cpassword:
-            if check:
-                return render(request,'vendor/register.html',{"error":"email has already taken !"})
-            else:
-                user=vendor_register_tb(name=name,email=email,password=password,bank=bank,ifsc=ifsc)
-                user.save()
-                return render(request,'vendor/login.html',{"error":"Rgisterd sucessfully Please Login  !"})
+    if request.method == 'POST':
+        name = request.POST['name']
+        email = request.POST['email']
+        password = request.POST['password']
+        cpassword = request.POST['cpassword']
+        bank = request.POST['account_number']
+        ifsc = request.POST['ifsc_code']
+        
+        # Check if passwords match
+        if password != cpassword:
+            return render(request, "vendor/register.html", {"error": "Passwords don't match!"})
+        
+        # Check if the email is already taken
+        check = vendor_register_tb.objects.filter(email=email)
+        if check:
+            return render(request, 'vendor/register.html', {"error": "Email has already been taken!"})
+        
+        # Create a Razorpay customer account
+        razorpay_payload = {
+            "name": name,
+            "email": email,
+            # Add any other relevant fields for customer creation
+        }
+        razorpay_response = requests.post('https://api.razorpay.com/v1/customers', json=razorpay_payload, auth=('rzp_test_9wyCq1vo5Rar4X', 'NVnQDSzoPqNaWP5Ka8d4zqGF'))
+        
+        if razorpay_response.status_code == 200:
+            # Customer account created successfully, proceed with saving user data
+            user = vendor_register_tb(name=name, email=email, password=password, bank=bank, ifsc=ifsc)
+            user.save()
+            return render(request, 'vendor/login.html', {"error": "Registered successfully. Please login!"})
         else:
-            return render(request,"vendor/register.html",{"error":"Passwords doesn't match !"})
-
+            # Handle Razorpay customer creation failure
+            return render(request, 'vendor/register.html', {"error": "Failed to create account."})
+    
     else:
-        return render(request,'vendor/register.html')
+        return render(request, 'vendor/register.html')
+    
+
+
+
 
 def login(request):
 	if request.method=='POST':

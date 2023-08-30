@@ -8,6 +8,11 @@ from django.conf import settings
 from django.http import JsonResponse
 import json
 
+
+
+import requests
+
+
 # Create your views here.
 
 def index(request):
@@ -396,17 +401,14 @@ def payment(request):
 			
 			
 				
+			vendor_amount = int(total_amount) * 0.7 
+			your_amount = total_amount - vendor_amount
 
-			# Calculate amounts for the parties involved
-			# Example amount in paise
-			third_party_amount = int(total_amount) * 0.7 
-			your_amount = total_amount - third_party_amount
-
-			# Create a dictionary for split details
+			
 			split_details = [
 				{
-					'linked_account_id': '55555555555555',
-					'amount': third_party_amount,
+					'linked_account_id': ven_bank,
+					'amount': vendor_amount,
 				},
 				{
 					'linked_account_id': '888888888888888',
@@ -414,22 +416,26 @@ def payment(request):
 				}
 			]
 
-			# Convert the split details dictionary to a JSON string
+			
 			split_details_json = json.dumps(split_details)
 			print(split_details)
 
-			# Create a Razorpay order
+
+
+
+
+
 			order_data = {
 				'amount': total_amount,
 				'currency': 'INR',
-				'payment_capture': 1,  # Auto-capture payments
+				'payment_capture': 1,  
 				'notes': {
 					'split_details': split_details_json,
 				}
 			}
 			order = client.order.create(data=order_data)
 
-			order_amount = total_amount * 100  # Convert to paise
+			order_amount = total_amount * 100  
 
 			return JsonResponse({'order_id': order['id'], 'order_amount': order_amount})
 		
