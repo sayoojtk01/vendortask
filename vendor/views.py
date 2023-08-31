@@ -25,35 +25,66 @@ def register(request):
         cpassword = request.POST['cpassword']
         bank = request.POST['account_number']
         ifsc = request.POST['ifsc_code']
+        street = request.POST['street']
+        street2 = request.POST['street2']
+        city = request.POST['city']
+        state = request.POST['state']
+        pin = request.POST['pin']
+        phone = request.POST['phone']
         
-        # Check if passwords match
+        
         if password != cpassword:
             return render(request, "vendor/register.html", {"error": "Passwords don't match!"})
         
-        # Check if the email is already taken
+      
         check = vendor_register_tb.objects.filter(email=email)
         if check:
             return render(request, 'vendor/register.html', {"error": "Email has already been taken!"})
         
-        # Create a Razorpay customer account
-        razorpay_payload = {
-            "name": name,
-            "email": email,
-            # Add any other relevant fields for customer creation
-        }
-        razorpay_response = requests.post('https://api.razorpay.com/v1/customers', json=razorpay_payload, auth=('rzp_test_9wyCq1vo5Rar4X', 'NVnQDSzoPqNaWP5Ka8d4zqGF'))
+        
+        razorpay_payloads = {
+              
+            "email":email,
+            "phone":phone,
+            "type":"route",
+            "legal_business_name":"downy shoe",
+            "business_type":"partnership",
+            "contact_name":name,
+            "profile":{
+                "category":"ecommerce",
+                "subcategory":"ecommerce_marketplace",
+                "addresses":{
+                    "registered":{
+                        "street1":street,
+                        "street2":street2,
+                        "city":city,
+                        "state":state,
+                        "postal_code":pin,
+                        "country":"IN"
+                    }
+                }
+            }
+            
+            }
+
+
+        razorpay_response = requests.post('https://api.razorpay.com/v2/accounts', json=razorpay_payloads, auth=('rzp_test_9wyCq1vo5Rar4X', 'NVnQDSzoPqNaWP5Ka8d4zqGF'))
+
+
+        
         
         if razorpay_response.status_code == 200:
-            # Customer account created successfully, proceed with saving user data
+
+
             user = vendor_register_tb(name=name, email=email, password=password, bank=bank, ifsc=ifsc)
             user.save()
             return render(request, 'vendor/login.html', {"error": "Registered successfully. Please login!"})
         else:
-            # Handle Razorpay customer creation failure
+            
             return render(request, 'vendor/register.html', {"error": "Failed to create account."})
     
     else:
-        return render(request, 'vendor/register.html')
+        return render(request, 'vendor/register.html',{"error": "nooooooooooo"})
     
 
 

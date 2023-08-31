@@ -11,6 +11,7 @@ class vendor_register_tb(models.Model):
 	ifsc=models.CharField(max_length=100)
 	place=models.CharField(max_length=100)
 	
+	
 
 
 class vendor_product_tb(models.Model):

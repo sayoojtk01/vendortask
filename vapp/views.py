@@ -7,6 +7,7 @@ import razorpay
 from django.conf import settings
 from django.http import JsonResponse
 import json
+import requests
 
 
 
@@ -405,20 +406,72 @@ def payment(request):
 			your_amount = total_amount - vendor_amount
 
 			
-			split_details = [
-				{
-					'linked_account_id': ven_bank,
-					'amount': vendor_amount,
-				},
-				{
-					'linked_account_id': '888888888888888',
-					'amount': your_amount,
-				}
-			]
+			# split_details = [
+			# 	{
+			# 		'linked_account_id': ven_bank,
+			# 		'amount': vendor_amount,
+			# 	},
+			# 	{
+			# 		'linked_account_id': '888888888888888',
+			# 		'amount': your_amount,
+			# 	}
+			# ]
 
 			
-			split_details_json = json.dumps(split_details)
-			print(split_details)
+			# split_details_json = json.dumps(split_details)
+			# print(split_details)
+
+
+
+
+
+
+
+			razorpay_payload = {
+					"amount": total_amount,
+					"payment_capture": 1,
+					"currency":"INR",
+					"transfers": [
+						{
+							"account": "acc_MWEiTyxfLYUs9n",
+							"amount" : vendor_amount,
+							"currency": "INR",
+							"notes": {
+								"branch": "Acme Corp Bangalore North",
+								"name": vname
+							},
+							"linked_account_notes": [
+								"branch"
+							]
+							
+						},
+						{
+							"account": "acc_MWBOLjSIXAIlDL",
+							"amount" : your_amount,
+							"currency": "INR",
+							"notes": {
+								"branch": "Acme Corp Bangalore North",
+								"name": "Admin"
+							},
+							"linked_account_notes": [
+								"branch"
+							]
+							
+						}
+						
+					]
+				}
+			
+			razorpay_response = requests.post('https://api.razorpay.com/v1/orders', json=razorpay_payload, auth=('rzp_test_9wyCq1vo5Rar4X', 'NVnQDSzoPqNaWP5Ka8d4zqGF'))
+        
+
+
+
+
+
+
+
+
 
 
 
@@ -429,9 +482,9 @@ def payment(request):
 				'amount': total_amount,
 				'currency': 'INR',
 				'payment_capture': 1,  
-				'notes': {
-					'split_details': split_details_json,
-				}
+				# 'notes': {
+				# 	'split_details': split_details_json,
+				# }
 			}
 			order = client.order.create(data=order_data)
 

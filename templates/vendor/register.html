@@ -15,22 +15,40 @@
     <form action="/vendor/venregister/" method="post">{% csrf_token %}
         {{error}}
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required><br><br>
+        <input type="text" id="name" name="name"  required><br>
         
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
+        <input type="email" id="email" name="email" required><br>
         
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
+        <input type="password" id="password" name="password" required><br>
         
         <label for="confirm_password">Confirm Password:</label>
-        <input type="password" id="confirm_password" name="cpassword" required><br><br>
+        <input type="password" id="confirm_password" name="cpassword" required><br>
         
         <label for="account_number">Bank Account Number:</label>
-        <input type="text" id="account_number" name="account_number" required><br><br>
+        <input type="text" id="account_number" name="account_number" required><br>
         
         <label for="ifsc_code">IFSC Code:</label>
-        <input type="text" id="ifsc_code" name="ifsc_code" required><br><br>
+        <input type="text" id="ifsc_code" name="ifsc_code" required><br>
+
+        <label for="ifsc_code">Street1:</label>
+        <input type="text" id="ifsc_code" name="street" required><br>
+
+        <label for="ifsc_code">Street2:</label>
+        <input type="text" id="ifsc_code" name="street2" required><br>
+
+        <label for="ifsc_code">City:</label>
+        <input type="text" id="ifsc_code" name="city" required><br>
+
+        <label for="ifsc_code">State:</label>
+        <input type="text" id="ifsc_code" name="state" required><br>
+
+        <label for="ifsc_code">Pin:</label>
+        <input type="number" id="ifsc_code" name="pin" required><br>
+
+        <label for="ifsc_code">Phone:</label>
+        <input type="number" id="ifsc_code" name="phone" required><br>
         
         <!-- <label for="place">Place:</label>
         <input type="text" id="place" name="place" required><br><br> -->
